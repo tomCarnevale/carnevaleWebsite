@@ -13,10 +13,11 @@ export default class App extends React.Component {
         return <div>
             <Banner />
             <div className='dioramaContainer'>
-                <DioramaParallax />
-                <DioramaParallax />
-                <DioramaParallax />
-                <DioramaParallax />
+                <DioramaParallax index={0}/>
+                {/* <DioramaParallax index={1}/> */}
+                <DioramaParallax index={2}/>
+                <DioramaParallax index={3}/>
+                <Diorama/>
             </div>
             <InfoDump />
             <PlaceholderImage height='600' />

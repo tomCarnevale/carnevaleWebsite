@@ -5,7 +5,12 @@ import Tilt from 'react-tilt'
 // import vertex from './shaders/vertex.glsl';
 import mountain from './img/mount.jpg';
 import mountainMap from './img/mount-map.jpg';
-
+import ball from './img/ball.jpg';
+import ballMap from './img/ball-map.jpg';
+import lady from './img/lady.jpg';
+import ladyMap from './img/lady-map.jpg';
+import canyon from './img/canyon.jpg';
+import canyonMap from './img/canyon-map.jpg';
 var vertex = `
 attribute vec2 a_position;
 
@@ -41,12 +46,24 @@ void main() {
   vec2 fake3d = vec2(vUv.x + (tex1.r - 0.5)*mouse.x/threshold.x, vUv.y + (tex1.r - 0.5)*mouse.y/threshold.y);
   gl_FragColor = texture2D(image0,mirrored(fake3d));
 }`;
+
+const imageGroups = [
+    [mountain, mountainMap,],
+    [ball, ballMap,],
+    [lady, ladyMap,],
+    [canyon, canyonMap,],
+
+]
 export default class DioramaParallax extends React.Component {
 
-    constructor() {
-        super();
+
+    constructor(props) {
+        super(props);
         this.canvasRef = React.createRef();
         this.container = React.createRef();
+        this.state = {
+            index: props.index
+        }
     }
     componentDidMount() {
         this.context = this.canvasRef.current.getContext('webgl');
@@ -64,9 +81,7 @@ export default class DioramaParallax extends React.Component {
         this.vth = '10';
         this.hth = '15';
 
-        this.imageURLs = [
-            mountain, mountainMap,
-        ];
+        this.imageURLs = imageGroups[this.state.index];
         this.textures = [];
 
         // colors
@@ -202,7 +217,7 @@ export default class DioramaParallax extends React.Component {
             a2 = 1;
         }
         this.uResolution.set(this.width, this.height, a1, a2);
-        this.uRatio.set(1 );
+        this.uRatio.set(1);
         this.uThreshold.set(this.hth, this.vth);
         this.gl.viewport(0, 0, this.width, this.height);
     }
@@ -217,8 +232,8 @@ export default class DioramaParallax extends React.Component {
         let currentTime = (now - this.startTime) / 1000;
         this.uTime.set(currentTime);
         // inertia
-        this.mouseX += (this.mouseTargetX - this.mouseX) * 0.1;
-        this.mouseY += (this.mouseTargetY - this.mouseY) * 0.1;
+        this.mouseX += (this.mouseTargetX - this.mouseX) * 0.35;
+        this.mouseY += (this.mouseTargetY - this.mouseY) * 0.35;
 
 
         this.uMouse.set(-this.mouseX, -this.mouseY);
