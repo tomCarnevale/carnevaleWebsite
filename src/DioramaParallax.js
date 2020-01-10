@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import { Canvas, useFrame } from 'react-three-fiber'
-import Tilt from 'react-tilt'
 // import fragment from './shaders/fragment.glsl';
 // import vertex from './shaders/vertex.glsl';
 import mountain from './img/mount.jpg';
@@ -61,8 +60,15 @@ export default class DioramaParallax extends React.Component {
         super(props);
         this.canvasRef = React.createRef();
         this.container = React.createRef();
+        var height = "300px";
+        if (props.height) {
+            height = props.height;
+        }
+
+
         this.state = {
-            index: props.index
+            index: props.index,
+            height: height
         }
     }
     componentDidMount() {
@@ -236,7 +242,7 @@ export default class DioramaParallax extends React.Component {
         this.mouseY += (this.mouseTargetY - this.mouseY) * 0.35;
 
 
-        this.uMouse.set(-this.mouseX, -this.mouseY);
+        this.uMouse.set(-this.mouseX * .5, -this.mouseY * .5) ;
 
         // render
         this.billboard.renderStuff(this.gl);
@@ -245,16 +251,11 @@ export default class DioramaParallax extends React.Component {
 
     render() {
         return (
-            <div className="diorama" ref={this.container} >
-
-                <Tilt className="canvasTilt" options={{ max: 10, scale: 1.05, speed: 500, reverse: false }}  >
-                    <div className="Tilt-inner">
-                        <div id="gl" >
-                            <canvas ref={this.canvasRef}>
-                            </canvas>
-                        </div>
-                    </div>
-                </Tilt>
+            <div ref={this.container} style={{height: this.state.height}}>
+                <div id="gl" >
+                    <canvas ref={this.canvasRef}>
+                    </canvas>
+                </div>
             </div>
         )
     }
