@@ -33,9 +33,9 @@ body {
 
 .canvasTilt {
     background-color: #666;
-    margin: 0 auto;
+    /* margin: 0 auto;
     width: 100%;
-    height: 300px;
+    height: 300px; */
 }
 
 .centerSlim {

@@ -19,7 +19,7 @@ export default class Home extends React.Component {
                 <Banner />
                 <div className='dioramaContainer'>
                     <Link to="/test0">
-                        <DioramaParallaxTilt index={0} />
+                        <DioramaParallaxTilt index={0} height={300} />
                     </Link>
                     <Link to="/test1">
                         <DioramaParallaxTilt index={1} />

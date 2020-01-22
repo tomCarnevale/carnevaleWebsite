@@ -50,8 +50,7 @@ const imageGroups = [
     [mountain, mountainMap,],
     [ball, ballMap,],
     [lady, ladyMap,],
-    [canyon, canyonMap,],
-
+    [canyon, canyonMap,]
 ]
 export default class DioramaParallax extends React.Component {
 
@@ -72,8 +71,9 @@ export default class DioramaParallax extends React.Component {
         }
     }
     componentDidMount() {
-        this.context = this.canvasRef.current.getContext('webgl');
-        this.gl = this.context;
+        console.log(this.canvasRef.current);
+        this.gl = this.canvasRef.current.getContext('webgl');
+
         this.ratio = window.devicePixelRatio;
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
@@ -242,7 +242,7 @@ export default class DioramaParallax extends React.Component {
         this.mouseY += (this.mouseTargetY - this.mouseY) * 0.35;
 
 
-        this.uMouse.set(-this.mouseX * .5, -this.mouseY * .5) ;
+        this.uMouse.set(-this.mouseX * .5, -this.mouseY * .5);
 
         // render
         this.billboard.renderStuff(this.gl);
@@ -251,7 +251,9 @@ export default class DioramaParallax extends React.Component {
 
     render() {
         return (
-            <div ref={this.container} style={{height: this.state.height}}>
+            <div ref={this.container}
+                style={{ height: this.state.height }}
+            >
                 <div id="gl" >
                     <canvas ref={this.canvasRef}>
                     </canvas>
