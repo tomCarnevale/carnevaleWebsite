@@ -22,13 +22,13 @@ export default class Home extends React.Component {
                         <DioramaParallaxTilt index={0} height={300} />
                     </Link>
                     <Link to="/test1">
-                        <DioramaParallaxTilt index={1} />
+                        <DioramaParallaxTilt index={1} height={300}/>
                     </Link>
                     <Link to="/test2">
-                        <DioramaParallaxTilt index={2} />
+                        <DioramaParallaxTilt index={2} height={300}/>
                     </Link>
                     <Link to="/test3">
-                        <DioramaParallaxTilt index={3} />
+                        <DioramaParallaxTilt index={3} height={300}/>
                     </Link>
                     <Diorama />
                     <Diorama />

@@ -252,7 +252,7 @@ export default class DioramaParallax extends React.Component {
     render() {
         return (
             <div ref={this.container}
-                style={{ height: this.state.height }}
+                style={{ height: this.props.height }}
             >
                 <div id="gl" >
                     <canvas ref={this.canvasRef}>

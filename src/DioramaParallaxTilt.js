@@ -1,8 +1,8 @@
 import DioramaParallax from "./DioramaParallax";
-import React, { useRef } from 'react'
+import React, { useRef, Image } from 'react'
 import Tilt from 'react-tilt'
 import { Animate } from 'react-move'
-import { easeCubicIn } from 'd3-ease'
+import { easeCubicInOut } from 'd3-ease'
 import ReactDOM from 'react-dom';
 
 import mountain from './img/mount.jpg';
@@ -23,6 +23,7 @@ export default class DioramaParallaxTilt extends React.Component {
         super(props);
 
         this.img = React.createRef();
+        // this.diorama = React.createRef();
 
         this.state = {
             index: props.index,
@@ -30,7 +31,11 @@ export default class DioramaParallaxTilt extends React.Component {
         }
         this.update = this.update.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+
+       
+        
     }
+
 
 
     componentDidMount() {
@@ -38,7 +43,9 @@ export default class DioramaParallaxTilt extends React.Component {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
         this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    
 
+        // this.setState({ initialUpdate: true, initialWidth: this.diorama.current.width, initialHeight: this.diorama.current.height })
     }
 
     componentWillUnmount() {
@@ -56,17 +63,33 @@ export default class DioramaParallaxTilt extends React.Component {
     update() {
         if (this.state.wasClicked == true) {
             this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-            console.log(this.img.current.style);
+
+
+            this.imageAspect = this.img.current.naturalHeight / this.img.current.naturalWidth;
+            console.log(this.imageAspect);
+
+            let a1, a2;
+            if (this.windowHeight / this.windowWidth < this.imageAspect) {
+                a1 = 1;
+                a2 = (this.windowHeight / this.windowWidth) / this.imageAspect;
+            } else {
+                a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
+                a2 = 1;
+            }
+
+            let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
+            console.log(diff);
             return {
-                height: [this.windowHeight],
-                width: [this.windowWidth],
+                height: [this.windowHeight / a2],
+                width: [this.windowWidth / a1],
                 x: [-this.rect.x],
-                y: [-this.rect.y],
-                timing: { duration: 500, ease: easeCubicIn },
+                y: [-this.rect.y + diff],
+                z: 5,
+                timing: { duration: 700, ease: easeCubicInOut },
                 position: 'absolute',
                 // events: {
                 //     start: () => {
-                        
+
                 //     },
                 //     interrupt: () => {
 
@@ -76,23 +99,38 @@ export default class DioramaParallaxTilt extends React.Component {
                 //     },
                 // }
             }
+        } else if (this.state.initialUpdate == true) {
+
+            console.log(this.state.initialHeight);
+            return {
+                height: this.state.initialHeight,
+                width: this.state.initialWidth,
+                x: 0,
+                y: 0,
+                position: 'absolute'
+            }
+
         }
     }
 
     render() {
+
+        let elementWidth = (window.innerWidth * .8) / 2 - 15;
         return (
             <div onClick={this.handleClick}>
                 <Animate
+                    
                     start={{
-                        height: 0,
-                        width: 0,
+                        height: this.state.height,
+                        width: elementWidth,
                         x: 0,
                         y: 0,
+                        z: -1,
                         position: 'absolute'
                     }}
                     update={this.update}>
 
-                    {({ height, width, position, x, y }) => {
+                    {({ height, width, position, x, y, z}) => {
                         return (
                             // <Tilt className="canvasTilt" options={{ max: 10, scale: 1.05, speed: 500, reverse: false }}  style={{
                             //     width: this.state.width
@@ -106,10 +144,11 @@ export default class DioramaParallaxTilt extends React.Component {
                                         width,
                                         position,
                                         WebkitTransform: `translate(${x}px, ${y}px)`,
-                                        transform: `translate(${x}px, ${y}px)`
+                                        transform: `translate(${x}px, ${y}px)`,
+                                        zIndex: z
                                     }}
                                 />
-                                <DioramaParallax index={this.state.index} height={this.state.height} />
+                                <DioramaParallax index={this.state.index} height={this.state.height} ref={this.getDioramaRef} />
                             </div>
 
                             // </svg>

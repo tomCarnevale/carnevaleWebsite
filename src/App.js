@@ -21,7 +21,7 @@ export default function App() {
         <Router>
             <Route render={({ location }) => (
                 <TransitionGroup>
-                    <Transition timeout={600} key={location.key}>
+                    <Transition timeout={700} key={location.key}>
                         <Switch location={location}>
                             <Route exact path="/" component={Home} />
                             <Route path="/test0">
