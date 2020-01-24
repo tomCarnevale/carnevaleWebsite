@@ -9,6 +9,7 @@ import mountain from './img/mount.jpg';
 import ball from './img/ball.jpg';
 import lady from './img/lady.jpg';
 import canyon from './img/canyon.jpg';
+import { interpolate } from 'd3-interpolate'
 
 const imageGroups = [
     mountain,
@@ -23,7 +24,7 @@ export default class DioramaParallaxTilt extends React.Component {
         super(props);
 
         this.img = React.createRef();
-        // this.diorama = React.createRef();
+        this.diorama = React.createRef();
 
         this.state = {
             index: props.index,
@@ -32,8 +33,8 @@ export default class DioramaParallaxTilt extends React.Component {
         this.update = this.update.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 
-       
-        
+
+
     }
 
 
@@ -43,7 +44,7 @@ export default class DioramaParallaxTilt extends React.Component {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
         this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
-    
+
 
         // this.setState({ initialUpdate: true, initialWidth: this.diorama.current.width, initialHeight: this.diorama.current.height })
     }
@@ -66,7 +67,6 @@ export default class DioramaParallaxTilt extends React.Component {
 
 
             this.imageAspect = this.img.current.naturalHeight / this.img.current.naturalWidth;
-            console.log(this.imageAspect);
 
             let a1, a2;
             if (this.windowHeight / this.windowWidth < this.imageAspect) {
@@ -78,7 +78,6 @@ export default class DioramaParallaxTilt extends React.Component {
             }
 
             let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
-            console.log(diff);
             return {
                 height: [this.windowHeight / a2],
                 width: [this.windowWidth / a1],
@@ -100,8 +99,6 @@ export default class DioramaParallaxTilt extends React.Component {
                 // }
             }
         } else if (this.state.initialUpdate == true) {
-
-            console.log(this.state.initialHeight);
             return {
                 height: this.state.initialHeight,
                 width: this.state.initialWidth,
@@ -119,7 +116,7 @@ export default class DioramaParallaxTilt extends React.Component {
         return (
             <div onClick={this.handleClick}>
                 <Animate
-                    
+
                     start={{
                         height: this.state.height,
                         width: elementWidth,
@@ -128,9 +125,22 @@ export default class DioramaParallaxTilt extends React.Component {
                         z: -1,
                         position: 'absolute'
                     }}
-                    update={this.update}>
+                    update={this.update}
 
-                    {({ height, width, position, x, y, z}) => {
+                    // interpolation={(begin, end, attr, namespace) => {
+
+                    //     if (attr == 'width') {
+                    //         this.diorama.current.resizeHandler();
+                    //         return interpolate(begin, end);
+                    //     }
+                    //     else
+                    //         return interpolate(begin, end);
+                    // }}
+                >
+
+
+
+                    {({ height, width, position, x, y, z }) => {
                         return (
                             // <Tilt className="canvasTilt" options={{ max: 10, scale: 1.05, speed: 500, reverse: false }}  style={{
                             //     width: this.state.width
@@ -148,7 +158,7 @@ export default class DioramaParallaxTilt extends React.Component {
                                         zIndex: z
                                     }}
                                 />
-                                <DioramaParallax index={this.state.index} height={this.state.height} ref={this.getDioramaRef} />
+                                <DioramaParallax index={this.state.index} height={height} ref={this.diorama} />
                             </div>
 
                             // </svg>

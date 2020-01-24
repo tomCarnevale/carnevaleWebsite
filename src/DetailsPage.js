@@ -36,7 +36,10 @@ export default class DetailsPage extends React.Component {
 
         return (
             <div >
-                <DioramaParallax index={this.state.index} height={this.state.height} />
+                <DioramaParallax index={this.state.index} height={this.state.height} style={{
+                    position: "absolute"
+                }}/>
+
             </div>
 
         )

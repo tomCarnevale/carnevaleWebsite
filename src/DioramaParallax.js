@@ -70,6 +70,12 @@ export default class DioramaParallax extends React.Component {
             height: height
         }
     }
+
+    componentDidUpdate()
+    {
+        // this.resizeHandler();
+    }
+
     componentDidMount() {
         console.log(this.canvasRef.current);
         this.gl = this.canvasRef.current.getContext('webgl');
