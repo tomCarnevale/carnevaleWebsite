@@ -13,25 +13,31 @@ import DioramaParallaxTilt from './DioramaParallaxTilt';
 import { Link } from 'react-router-dom';
 
 export default class Home extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            navigation: props.navigation
+        }
+        console.log(props);
+    }
+  
+    componentDidMount()
+    {
+        console.log("mounted home");
+    }
+
     render() {
         return (
             <div>
                 <Banner />
-                <div className='dioramaContainer'>
-                    <Link to="/test0">
-                        <DioramaParallaxTilt index={0} height={300} />
-                    </Link>
-                    <Link to="/test1">
-                        <DioramaParallaxTilt index={1} height={300}/>
-                    </Link>
-                    <Link to="/test2">
-                        <DioramaParallaxTilt index={2} height={300}/>
-                    </Link>
-                    <Link to="/test3">
-                        <DioramaParallaxTilt index={3} height={300}/>
-                    </Link>
-                    <Diorama />
-                    <Diorama />
+                <div className='dioramaGrid'>
+                    <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation}/>
+                    <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation}/>
+                    <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation}/>
+                    <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation}/>
+                    {/* <Diorama />
+                    <Diorama /> */}
                 </div>
                 <InfoDump />
                 <PlaceholderImage height='600' />

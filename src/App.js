@@ -10,37 +10,48 @@ import Links from './Links';
 import Contact from './Contact';
 import Home from './Home';
 
-import { SwitchTransition, Transition, TransitionGroup } from 'react-transition-group';
+import { Transition, TransitionGroup, SwitchTransition } from 'react-transition-group';
 import { Route, BrowserRouter as Router, Switch, Link, useRouteMatch } from 'react-router-dom';
 import DetailsPage from './DetailsPage';
 
-export default function App() {
+export default class App extends React.Component {
     // let match = useRouteMatch({path: "/"});
+    componentDidUpdate(nextProps) {
+        console.log(nextProps.location);
+        if (nextProps.location !== this.props.location) {
+            // navigated!
+            console.log("Nav!");
+        }
+    }
 
-    return (
-        <Router>
-            <Route render={({ location }) => (
-                <TransitionGroup>
-                    <Transition timeout={700} key={location.key}>
-                        <Switch location={location}>
-                            <Route exact path="/" component={Home} />
-                            <Route path="/test0">
-                                <DetailsPage index={0} />
-                            </Route>
-                            <Route path="/test1">
-                                <DetailsPage index={1} />
-                            </Route>
-                            <Route path="/test2">
-                                <DetailsPage index={2} />
-                            </Route>
-                            <Route path="/test3">
-                                <DetailsPage index={3} />
-                            </Route>
-                            <Route render={() => <div>Not Found</div>} />
-                        </Switch>
-                    </Transition>
-                 </TransitionGroup>
-            )} />
-        </Router>
-    );
+
+
+    render() {
+        return (
+            <Router>
+                {/* <Route render={({ location }) => ( */}
+                <Switch >
+                    <Route exact path="/" render={props => <Home navigation={props} />} />
+                    <Route path="/test0" render={props => <DetailsPage index={0} navigation={props} />} />
+                    <Route path="/test1" render={props => <DetailsPage index={1} navigation={props} />} />
+                    <Route path="/test2" render={props => <DetailsPage index={2} navigation={props} />} />
+                    <Route path="/test3" render={props => <DetailsPage index={3} navigation={props} />} />
+
+                </Switch>
+
+
+                {/* )} /> */}
+            </Router>
+        );
+    }
 }
+
+    // <SwitchTransition>
+                    //     <Transition timeout={3000}
+                    //     // onEntered={(node, isAppearing) => {
+                    //     //     if (location.pathname != "/")
+                    //     //         window.scrollTo(0, 0);
+                    //     // }}
+                    //     >
+                    //            </Transition>
+                    // </SwitchTransition>

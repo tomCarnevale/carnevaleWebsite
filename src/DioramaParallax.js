@@ -59,15 +59,11 @@ export default class DioramaParallax extends React.Component {
         super(props);
         this.canvasRef = React.createRef();
         this.container = React.createRef();
-        var height = "300px";
-        if (props.height) {
-            height = props.height;
-        }
-
-
+       
+        console.log(props.height);
         this.state = {
             index: props.index,
-            height: height
+            height: props.height
         }
     }
 
@@ -77,7 +73,7 @@ export default class DioramaParallax extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.canvasRef.current);
+        // console.log(this.canvasRef.current);
         this.gl = this.canvasRef.current.getContext('webgl');
 
         this.ratio = window.devicePixelRatio;
@@ -270,7 +266,7 @@ export default class DioramaParallax extends React.Component {
 }
 
 function loadImage(url, callback) {
-    console.log("start load image");
+    // console.log("start load image");
     var image = new Image();
     image.src = url;
     image.onload = callback;
@@ -279,11 +275,11 @@ function loadImage(url, callback) {
 function loadImages(urls, callback) {
     var images = [];
     var imagesToLoad = urls.length;
-    console.log('loading images');
+    // console.log('loading images');
     // Called each time an image finished loading.
     var onImageLoad = function () {
         --imagesToLoad;
-        console.log('loaded an image');
+        // console.log('loaded an image');
 
         // If all the images are loaded call the callback.
         if (imagesToLoad === 0) {

@@ -10,7 +10,7 @@ body {
     background-color: #999;
 }
 
-.dioramaContainer {
+.dioramaGrid {
     display: grid;
     margin: 0 auto;
     width: 80%;
@@ -44,11 +44,17 @@ body {
     width: 80%;
 }
 
+.detailsPageContent {
+    margin: 0 auto;
+    width: 80%;
+    font-size: 30px;
+}
+
 .infoDumpTitle {
     margin-bottom: 15px;
 }
+
 .infoDumpText {
     font-size: 30px;
     width: 80%;
 }
-
