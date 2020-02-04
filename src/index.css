@@ -11,11 +11,11 @@ body {
 }
 
 .dioramaGrid {
-    display: grid;
+    /* display: grid; */
     margin: 0 auto;
     width: 80%;
     grid-gap: 30px 30px;
-    grid-template-columns: 1fr 1fr;
+    /* grid-template-columns: 1fr 1fr; */
 }
 
 .bannerTextTitle {

@@ -11,8 +11,26 @@ import { SwitchTransition } from 'react-transition-group';
 import DetailsPage from './DetailsPage';
 import DioramaParallaxTilt from './DioramaParallaxTilt';
 import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
+const styles = {
+    grid: {
+        paddingLeft: 0,
+        paddingRight: 0
+    },
+    row: {
+        marginLeft: 0,
+        marginRight: 0
+    },
+    col: {
+        paddingLeft: 0,
+        paddingRight: 0
+    }
+};
 export default class Home extends React.Component {
+
 
     constructor(props) {
         super(props);
@@ -21,9 +39,8 @@ export default class Home extends React.Component {
         }
         console.log(props);
     }
-  
-    componentDidMount()
-    {
+
+    componentDidMount() {
         console.log("mounted home");
     }
 
@@ -31,14 +48,28 @@ export default class Home extends React.Component {
         return (
             <div>
                 <Banner />
-                <div className='dioramaGrid'>
-                    <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation}/>
-                    <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation}/>
-                    <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation}/>
-                    <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation}/>
-                    {/* <Diorama />
-                    <Diorama /> */}
-                </div>
+                {/* <div className='dioramaGrid'> */}
+
+                <Container >
+                    <Row >
+                        <Col md={12} lg={6} >
+                            <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation} />
+                        </Col>
+                        <Col md={12} lg={6} >
+                            <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation} />
+                        </Col>
+                    </Row>
+                    <Row >
+                        <Col md={12} lg={6} >
+                            <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation} />
+                        </Col>
+                        <Col md={12} lg={6} >
+                            <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation} />
+                        </Col>
+                    </Row>
+                </Container>
+
+                {/* </div> */}
                 <InfoDump />
                 <PlaceholderImage height='600' />
                 <InfoDump />
