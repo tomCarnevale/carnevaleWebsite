@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import { Canvas, useFrame } from 'react-three-fiber'
-import Tilt from 'react-tilt'
 // import fragment from './shaders/fragment.glsl';
 // import vertex from './shaders/vertex.glsl';
 import mountain from './img/mount.jpg';
@@ -51,8 +50,7 @@ const imageGroups = [
     [mountain, mountainMap,],
     [ball, ballMap,],
     [lady, ladyMap,],
-    [canyon, canyonMap,],
-
+    [canyon, canyonMap,]
 ]
 export default class DioramaParallax extends React.Component {
 
@@ -61,13 +59,23 @@ export default class DioramaParallax extends React.Component {
         super(props);
         this.canvasRef = React.createRef();
         this.container = React.createRef();
+       
+        console.log(props.height);
         this.state = {
-            index: props.index
+            index: props.index,
+            height: props.height
         }
     }
+
+    componentDidUpdate()
+    {
+        // this.resizeHandler();
+    }
+
     componentDidMount() {
-        this.context = this.canvasRef.current.getContext('webgl');
-        this.gl = this.context;
+        // console.log(this.canvasRef.current);
+        this.gl = this.canvasRef.current.getContext('webgl');
+
         this.ratio = window.devicePixelRatio;
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
@@ -236,7 +244,7 @@ export default class DioramaParallax extends React.Component {
         this.mouseY += (this.mouseTargetY - this.mouseY) * 0.35;
 
 
-        this.uMouse.set(-this.mouseX, -this.mouseY);
+        this.uMouse.set(-this.mouseX * .5, -this.mouseY * .5);
 
         // render
         this.billboard.renderStuff(this.gl);
@@ -245,23 +253,20 @@ export default class DioramaParallax extends React.Component {
 
     render() {
         return (
-            <div className="diorama" ref={this.container} >
-
-                <Tilt className="canvasTilt" options={{ max: 10, scale: 1.05, speed: 500, reverse: false }}  >
-                    <div className="Tilt-inner">
-                        <div id="gl" >
-                            <canvas ref={this.canvasRef}>
-                            </canvas>
-                        </div>
-                    </div>
-                </Tilt>
+            <div ref={this.container}
+                style={{ height: this.props.height }}
+            >
+                <div id="gl" >
+                    <canvas ref={this.canvasRef}>
+                    </canvas>
+                </div>
             </div>
         )
     }
 }
 
 function loadImage(url, callback) {
-    console.log("start load image");
+    // console.log("start load image");
     var image = new Image();
     image.src = url;
     image.onload = callback;
@@ -270,11 +275,11 @@ function loadImage(url, callback) {
 function loadImages(urls, callback) {
     var images = [];
     var imagesToLoad = urls.length;
-    console.log('loading images');
+    // console.log('loading images');
     // Called each time an image finished loading.
     var onImageLoad = function () {
         --imagesToLoad;
-        console.log('loaded an image');
+        // console.log('loaded an image');
 
         // If all the images are loaded call the callback.
         if (imagesToLoad === 0) {

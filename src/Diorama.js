@@ -6,7 +6,6 @@ export default class Diorama extends React.Component {
     render() {
         return (
             <div className="diorama">
-
                 <Tilt className="canvasTilt" options={{ max: 25 }}  >
                     <div className="Tilt-inner">
                         Some Text

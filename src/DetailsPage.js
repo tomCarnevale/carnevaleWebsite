@@ -1,0 +1,336 @@
+import React from 'react';
+import { Transition } from 'react-transition-group';
+import DioramaParallax from './DioramaParallax';
+import useWindowDimensions from './Utils';
+import { Link } from 'react-router-dom';
+import mountain from './img/mount.jpg';
+import ball from './img/ball.jpg';
+import lady from './img/lady.jpg';
+import canyon from './img/canyon.jpg';
+import { Animate } from 'react-move'
+import { easeCubicInOut } from 'd3-ease'
+import ReactDOM from 'react-dom';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+
+const imageGroups = [
+    mountain,
+    ball,
+    lady,
+    canyon
+]
+
+//TODO make this runtime
+const aspectRatios = [
+    1069 / 1600,
+    1067 / 1600,
+    853 / 1280,
+    855 / 1280
+]
+export default class DetailsPage extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            in: props.in,
+            index: props.index,
+            width: 0,
+            height: 0,
+            transitionState: props.transitionState,
+            text: "",
+            navigation: props.navigation
+        };
+
+        this.img = React.createRef();
+        this.diorama = React.createRef();
+        this.update = this.update.bind(this);
+
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+        this.setState({ text: this.getText() });
+        window.scrollTo(0, 0);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions() {
+        this.windowWidth = window.innerWidth;
+        this.windowHeight = window.innerHeight;
+
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+    }
+
+    componentWillUpdate() {
+    }
+
+    getText() {
+        return (
+            <div>
+ <br /> <br /> <br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+                The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
+            may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
+                the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
+            with your existing cloud, and solve pressing business challenges.Welcome to the unprecendented.
+        < br />
+            </div>
+        );
+    }
+
+    update() {
+
+        if (this.state.wasClicked == false) {
+
+            this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+
+            this.windowWidth = window.innerWidth;
+            this.windowHeight = window.innerHeight;
+            console.log(this.windowHeight);
+            this.imageAspect = this.img.current.naturalHeight / this.img.current.naturalWidth;
+            let a1, a2;
+            // if (this.windowHeight / this.windowWidth < this.imageAspect) {
+            //     a1 = 1;
+            //     a2 = (this.windowHeight / this.windowWidth) / this.imageAspect;
+            // } else {
+            //     a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
+            //     a2 = 1;
+            // }
+            a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
+            a2 = 1;
+
+            let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
+            return {
+                height: this.windowHeight / a2,
+                width: this.windowWidth / a1,
+                x: 0,
+                y: -diff,
+                z: -5,
+                timing: { duration: 700, ease: easeCubicInOut },
+                position: 'absolute',
+            }
+        }
+        // else if (this.state.wasClicked == true) {
+
+
+        //     return {
+        //         shrink: true,
+        //         height: [100],
+        //         width: [300],
+        //         x: 0,
+        //         y: 0,
+        //         z: -5,
+        //         timing: { duration: 700, ease: easeCubicInOut },
+        //         position: 'absolute',
+        //     }
+        // }
+    }
+    handleClick = () => {
+        console.log(this.state.navigation);
+        this.state.navigation.history.push('/');
+        // this.setState((prev) => ({ wasClicked: true }));
+    }
+
+
+
+    render() {
+
+        // this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+        this.imageAspect = aspectRatios[this.state.index];
+        this.windowWidth = window.innerWidth;
+        this.windowHeight = window.innerHeight;
+
+
+        //used to calculate the width and height of our static image and the canvas for the parallaxing effect
+        let aspectWidth, aspectHeight;
+        if (this.windowHeight / this.windowWidth < this.imageAspect) {
+            aspectWidth = 1;
+            aspectHeight = (this.windowHeight / this.windowWidth) / this.imageAspect;
+        } else {
+            aspectWidth = (this.windowWidth / this.windowHeight) * this.imageAspect;
+            aspectHeight = 1;
+        }
+
+        //height used for the parallaxing canvas 
+        let canvasAspectWidth, canvasAspectHeight;
+        canvasAspectWidth = (this.windowWidth / this.windowHeight) * this.imageAspect;
+        canvasAspectHeight = 1;
+
+        let diff = (this.windowHeight - (this.windowHeight / aspectHeight)) / 2;
+
+        // console.log(this.windowHeight);
+        return (
+            <div>
+
+                {/* <DioramaParallax index={this.state.index} height={this.state.height} style={{
+                    position: "absolute",
+                    zIndex: -100
+
+                }} /> */}
+
+                <Animate
+
+                    start={{
+                        shrink: false,
+                        height: this.windowHeight / aspectHeight,
+                        width: this.windowWidth / aspectWidth,
+                        canvasHeight: this.windowHeight / canvasAspectHeight,
+                        canvasWidth: this.windowWidth / canvasAspectWidth,
+                        // x: -this.rect.x,
+                        y: 0,
+                        z: -10,
+                        position: 'absolute'
+                    }}
+                    update={this.update}
+                >
+                    {({ height, canvasHeight, width, canvasWidth, position, x, y, z }) => {
+                        return (
+                            <div>
+
+                                {/* <Link to='/'> */}
+                                <div
+                                    onClick={this.handleClick}
+                                    style={{
+                                        position,
+                                        width: 50,
+                                        height: 50,
+                                        right: 20,
+                                        top: 20,
+                                        backgroundColor: 'rgba(200, 200, 200, 1)',
+                                        zIndex: 10
+                                    }}>
+                                </div>
+                                {/* </Link> */}
+                                <img src={imageGroups[this.state.index]} ref={this.img}
+                                    style={{
+                                        height,
+                                        width,
+                                        position: 'fixed',
+                                        top: diff,
+                                        // WebkitTransform: `translate(${x}px, ${y}px)`,
+                                        // transform: `translate(${x}px, ${y}px)`,
+                                        zIndex: z
+                                    }}
+                                />
+                                <div style={{
+                                    position: "fixed",
+                                    zIndex: 0,
+                                    height: "100%",
+                                    margin: "auto",
+                                    top: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    // backgroundColor: 'rgba(52, 52, 52, 0.8)'
+                                }}>
+
+                                    <Container style={{
+                                        position: "fixed",
+                                        zIndex: 0,
+                                        height: "100%",
+                                        margin: "auto",
+                                        top: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        left: 0,
+                                        width: "80%",
+                                        overflow: 'scroll',
+                                        fontSize: "30px",
+                                        color: "#dddddd"
+                                    }}>
+                                        <Row style={{
+                                            fontSize: "60px"
+                                        }}>
+                                            <Col xl={9} md={12}>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <br />
+                                               
+                                                HERE IS A TITLE THAT MIGHT BE PRETTY LONG</Col>
+                                        </Row>
+                                        <Row>
+                                            {this.getText()}
+                                        </Row>
+                                    </Container>
+
+                                </div>
+
+                                {/* <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama}
+                                    style={{
+                                        // height: canvasHeight,
+                                        // width: canvasWidth,
+                                        position: "fixed",
+                                        top: diff,
+                                        // WebkitTransform: `translate(${x}px, ${y}px)`,
+                                        // transform: `translate(${x}px, ${y}px)`,
+                                        zIndex: -5
+                                    }}
+                                /> */}
+
+                            </div>
+
+
+                        )
+
+                    }}
+
+                </Animate>
+            </div>
+
+        )
+    }
+}
+
