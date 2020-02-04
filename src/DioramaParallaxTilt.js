@@ -56,7 +56,8 @@ export default class DioramaParallaxTilt extends React.Component {
         window.addEventListener('resize', this.updateWindowDimensions);
         this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
-        this.setState({ shrink: this.state.navigation.history.action != "POP" })
+        if (this.state.navigation.history.action != "POP" && this.state.index == 0)
+            this.setState({ shrink: true });
 
         // this.setState({ initialUpdate: true, initialWidth: this.diorama.current.width, initialHeight: this.diorama.current.height })
     }
@@ -96,6 +97,10 @@ export default class DioramaParallaxTilt extends React.Component {
             x: [-this.rect.x],
             y: [-this.rect.y + diff],
             z: 100,
+            bottom: 0,
+            left: 0,
+            top: 0,
+            right: 0,
             timing: { duration: 600, ease: easeCubicInOut },
             position: 'absolute',
             max: 0,
@@ -140,9 +145,9 @@ export default class DioramaParallaxTilt extends React.Component {
             canvasWidth: elementWidth,
             x: 0,
             y: 0,
-            z: 0,
+            z: 10,
             timing: { duration: 600, ease: easeCubicInOut },
-            position: 'absolute',
+            position: 'fixed',
             max: 10,
             events: {
                 start: () => {
@@ -159,15 +164,30 @@ export default class DioramaParallaxTilt extends React.Component {
     }
 
     shrink() {
+        this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+
         window.scrollTo(0, 700);
         let elementWidth = (window.innerWidth * .8) / 2 - 15;
+        this.imageAspect = aspectRatios[this.state.index];
+
+        let a1, a2;
+        if (this.windowHeight / this.windowWidth < this.imageAspect) {
+            a1 = 1;
+            a2 = (this.windowHeight / this.windowWidth) / this.imageAspect;
+        } else {
+            a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
+            a2 = 1;
+        }
+
+        let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
+
         return {
             height: [this.state.height],
             width: [elementWidth],
-            x: [0],
-            y: [0],
-            z: [100, -1],
-            position: 'absolute',
+            x: [-this.rect.x, 0],
+            y: [-this.rect.y + diff + 700, 0],
+            z: [-1],
+            position: "absolute",
             max: 10,
             timing: { duration: 600, ease: easeCubicInOut },
             events: {
@@ -194,7 +214,7 @@ export default class DioramaParallaxTilt extends React.Component {
             x: 0,
             y: 0,
             z: -1,
-            position: 'absolute',
+            // position: 'absolute',
             max: 10
         }
     }
@@ -213,6 +233,7 @@ export default class DioramaParallaxTilt extends React.Component {
 
     render() {
         console.log(this.state.navigation.history.action);
+        let elementWidth = (window.innerWidth * .8) / 2 - 15;
 
         // if (this.state.redirect == true) {
         //     return <Redirect to={'/test' + this.state.index} />;
@@ -221,89 +242,72 @@ export default class DioramaParallaxTilt extends React.Component {
         return (
             <div onClick={this.handleClick}>
                 <Animate
+                    // start={this.state.index != 0? this.compactState() : this.shrinkStart()}
 
-                    start={this.state.navigation.history.action == "POP" ? this.compactState() : this.shrinkStart()}
+                    start={this.state.navigation.history.action == "POP" ? this.compactState() :
+                        this.state.index == 0 ? this.shrinkStart() : this.compactState()
+                    }
                     update={this.update}
                 >
-
-
-
-                    {({ height, canvasHeight, width, canvasWidth, position, x, y, z, max }) => {
+                    {({ height, canvasHeight, width, canvasWidth, position, x, y, z, bottom, left, top, right }) => {
                         return (
-                            // <svg style={style}>
-                            <div>
-                                {max > 0 ?
-                                    <Tilt className="canvasTilt" options={{ max, scale: 1.05, speed: 500, reverse: false }}
-                                        style={{
-                                            height: canvasHeight,
-                                            width: canvasWidth,
-                                            position,
-                                            zIndex: 1
+                            <div style={{
+                                position: 'relative',
+                               
+                            }}>
+                                <img src={imageGroups[this.state.index]} ref={this.img}
+                                    style={{
+                                        height,
+                                        width,
+                                        position: "absolute",
+                                        WebkitTransform: `translate(${x}px, ${y}px)`,
+                                        transform: `translate(${x}px, ${y}px)`,
+                                        zIndex: z,
+                                        objectFit: 'cover'
+                                    }}/>
 
-                                        }}
-                                    >
-                                        <div style={{
-                                            position: "absolute",
-                                            bottom: "30px",
-                                            left: "30px",
-                                            height: "20%",
-                                            width: "80%",
-                                            color: "#dddddd",
-                                            fontSize: 'x-large'
-                                        }}>
-                                            Celebrating Grilling without getting in the way
-                                        </div>
+                                <div style={{
+                                    bottom, top, left, right,
+                                    // width,
+                                    // height,
+                                    color: "#cccccc",
+                                    fontSize: 'x-large',
+                                    zIndex: 100,
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'bottom',
 
-                                        <DioramaParallax index={this.state.index} height={this.state.height} ref={this.diorama}
-                                            style={{
-                                                zIndex: 1,
-                                            }}
-                                        />
-                                    </Tilt> : null
-                                }
+                                }}>
+                                    <p style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: 30,
+                                        // WebkitTransform: `translate(${x}px, ${y}px)`,
+                                        // transform: `translate(${x}px, ${y}px)`,
+                                        zIndex: z + 2,
+                                    }} >
 
-
-                                <Tilt className="Tilt" options={{ max, scale: 1, speed: 500, reverse: false }}
+                                        Celebrating Grilling without getting in the way
+                                        </p>
+                                </div>
+                                <div //canvasHolder
                                     style={{
                                         height: canvasHeight,
                                         width: canvasWidth,
-                                        zIndex: z + 1,
+                                        // position: "absolute",
+                                        zIndex: 1
+                                    }}
+                                >
 
-                                    }} >
-
-                                    <div className="Tilt-inner">
-                                        <div style={{
-                                            position: "absolute",
-                                            bottom: "30px",
-                                            left: "30px",
-                                            height: "20%",
-                                            width: "80%",
-                                            color: "#dddddd",
-                                            fontSize: 'x-large',
-                                        }}>
-                                            Celebrating Grilling without getting in the way
-                                        </div>
-                                        <img src={imageGroups[this.state.index]} ref={this.img}
-                                            style={{
-                                                height,
-                                                width,
-                                                position,
-                                                WebkitTransform: `translate(${x}px, ${y}px)`,
-                                                transform: `translate(${x}px, ${y}px)`,
-                                                zIndex: z,
-
-                                            }}
-                                        />
-                                    </div>
-                                </Tilt>
-
+                                    <DioramaParallax index={this.state.index} height={this.state.height} ref={this.diorama}
+                                        style={{
+                                            zIndex: 1,
+                                        }}
+                                    />
+                                </div>
 
                             </div>
-
-                            // </svg>
-
                         )
-
                     }}
 
                 </Animate>

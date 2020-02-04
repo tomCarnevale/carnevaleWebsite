@@ -9,6 +9,7 @@ import { PlaceholderImage } from './PlaceholderImage';
 import Links from './Links';
 import Contact from './Contact';
 import Home from './Home';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Transition, TransitionGroup, SwitchTransition } from 'react-transition-group';
 import { Route, BrowserRouter as Router, Switch, Link, useRouteMatch } from 'react-router-dom';

@@ -10,6 +10,9 @@ import canyon from './img/canyon.jpg';
 import { Animate } from 'react-move'
 import { easeCubicInOut } from 'd3-ease'
 import ReactDOM from 'react-dom';
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 const imageGroups = [
     mountain,
@@ -71,17 +74,7 @@ export default class DetailsPage extends React.Component {
     getText() {
         return (
             <div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+ <br /> <br /> <br />
                 The best experiences change the game.They break new ground yet seem inevitable once introduced.While they
             may include IoT, AR / VR, and spacial computing, they are just as likely to defy categorization.Along with
                 the mobile and web, these are the experiences we create for enterprise.Ones that scale effortlessly, connect
@@ -159,7 +152,6 @@ export default class DetailsPage extends React.Component {
 
             let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
             return {
-                shrink: false,
                 height: this.windowHeight / a2,
                 width: this.windowWidth / a1,
                 x: 0,
@@ -198,20 +190,24 @@ export default class DetailsPage extends React.Component {
         this.imageAspect = aspectRatios[this.state.index];
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
-        let a1, a2;
 
-        //we always want to match the width
-        // if (this.windowHeight / this.windowWidth < this.imageAspect) {
-        //     a1 = 1;
-        //     a2 = (this.windowHeight / this.windowWidth) / this.imageAspect;
-        // } else {
-        //     a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
-        //     a2 = 1;
-        // }
 
-        a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
-        a2 = 1;
-        let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
+        //used to calculate the width and height of our static image and the canvas for the parallaxing effect
+        let aspectWidth, aspectHeight;
+        if (this.windowHeight / this.windowWidth < this.imageAspect) {
+            aspectWidth = 1;
+            aspectHeight = (this.windowHeight / this.windowWidth) / this.imageAspect;
+        } else {
+            aspectWidth = (this.windowWidth / this.windowHeight) * this.imageAspect;
+            aspectHeight = 1;
+        }
+
+        //height used for the parallaxing canvas 
+        let canvasAspectWidth, canvasAspectHeight;
+        canvasAspectWidth = (this.windowWidth / this.windowHeight) * this.imageAspect;
+        canvasAspectHeight = 1;
+
+        let diff = (this.windowHeight - (this.windowHeight / aspectHeight)) / 2;
 
         // console.log(this.windowHeight);
         return (
@@ -227,46 +223,47 @@ export default class DetailsPage extends React.Component {
 
                     start={{
                         shrink: false,
-                        height: this.windowHeight / a2,
-                        width: this.windowWidth / a1,
+                        height: this.windowHeight / aspectHeight,
+                        width: this.windowWidth / aspectWidth,
+                        canvasHeight: this.windowHeight / canvasAspectHeight,
+                        canvasWidth: this.windowWidth / canvasAspectWidth,
                         // x: -this.rect.x,
-                        y: -diff,
+                        y: 0,
                         z: -10,
                         position: 'absolute'
                     }}
                     update={this.update}
                 >
-                    {({ height, width, position, x, y, z, shrink }) => {
+                    {({ height, canvasHeight, width, canvasWidth, position, x, y, z }) => {
                         return (
                             <div>
 
                                 {/* <Link to='/'> */}
-                                    <div
-                                        onClick={this.handleClick} 
-                                        style={{
-                                            position,
-                                            width: 50,
-                                            height: 50,
-                                            right: 20,
-                                            top: 20,
-                                            backgroundColor: 'rgba(200, 200, 200, 1)',
-                                            zIndex: 10
-                                        }}>
-                                    </div>
+                                <div
+                                    onClick={this.handleClick}
+                                    style={{
+                                        position,
+                                        width: 50,
+                                        height: 50,
+                                        right: 20,
+                                        top: 20,
+                                        backgroundColor: 'rgba(200, 200, 200, 1)',
+                                        zIndex: 10
+                                    }}>
+                                </div>
                                 {/* </Link> */}
                                 <img src={imageGroups[this.state.index]} ref={this.img}
                                     style={{
                                         height,
                                         width,
-                                        position,
-                                        WebkitTransform: `translate(${x}px, ${y}px)`,
-                                        transform: `translate(${x}px, ${y}px)`,
+                                        position: 'fixed',
+                                        top: diff,
+                                        // WebkitTransform: `translate(${x}px, ${y}px)`,
+                                        // transform: `translate(${x}px, ${y}px)`,
                                         zIndex: z
                                     }}
                                 />
-
-
-                                <div className='detailsPageContent' style={{
+                                <div style={{
                                     position: "fixed",
                                     zIndex: 0,
                                     height: "100%",
@@ -278,7 +275,8 @@ export default class DetailsPage extends React.Component {
                                     width: "100%",
                                     // backgroundColor: 'rgba(52, 52, 52, 0.8)'
                                 }}>
-                                    <div className='detailsPageContent' style={{
+
+                                    <Container style={{
                                         position: "fixed",
                                         zIndex: 0,
                                         height: "100%",
@@ -289,23 +287,38 @@ export default class DetailsPage extends React.Component {
                                         left: 0,
                                         width: "80%",
                                         overflow: 'scroll',
+                                        fontSize: "30px",
+                                        color: "#dddddd"
                                     }}>
-                                        {this.getText()}
-                                    </div>
+                                        <Row style={{
+                                            fontSize: "60px"
+                                        }}>
+                                            <Col xl={9} md={12}>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <br />
+                                               
+                                                HERE IS A TITLE THAT MIGHT BE PRETTY LONG</Col>
+                                        </Row>
+                                        <Row>
+                                            {this.getText()}
+                                        </Row>
+                                    </Container>
 
                                 </div>
 
-                                {shrink == false ?
-                                    <DioramaParallax index={this.state.index} height={height} ref={this.diorama}
-                                        style={{
-                                            height,
-                                            width,
-                                            position,
-                                            WebkitTransform: `translate(${x}px, ${y}px)`,
-                                            transform: `translate(${x}px, ${y}px)`,
-                                            zIndex: -5
-                                        }}
-                                    /> : null}
+                                {/* <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama}
+                                    style={{
+                                        // height: canvasHeight,
+                                        // width: canvasWidth,
+                                        position: "fixed",
+                                        top: diff,
+                                        // WebkitTransform: `translate(${x}px, ${y}px)`,
+                                        // transform: `translate(${x}px, ${y}px)`,
+                                        zIndex: -5
+                                    }}
+                                /> */}
 
                             </div>
 
