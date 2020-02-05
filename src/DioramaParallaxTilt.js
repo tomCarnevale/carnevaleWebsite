@@ -34,6 +34,7 @@ export default class DioramaParallaxTilt extends React.Component {
 
         this.img = React.createRef();
         this.diorama = React.createRef();
+        this.container = React.createRef();
 
         this.state = {
             index: props.index,
@@ -57,8 +58,11 @@ export default class DioramaParallaxTilt extends React.Component {
         this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
         if (this.state.navigation.history.action != "POP" && this.state.index == 0)
-            this.setState({ shrink: true });
-
+            this.setState({ shrink: true, update: true });
+        else {
+            this.setState({ compact: true, update: true });
+        }
+        console.log(this.container.current.offsetWidth);
         // this.setState({ initialUpdate: true, initialWidth: this.diorama.current.width, initialHeight: this.diorama.current.height })
     }
 
@@ -69,9 +73,10 @@ export default class DioramaParallaxTilt extends React.Component {
     updateWindowDimensions() {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
+        this.setState({ update: true, shrink: false, compact: true });
     }
     handleClick = () => {
-        this.setState((prev) => ({ wasClicked: true }));
+        this.setState((prev) => ({ update: true, wasClicked: true }));
     }
 
     grow() {
@@ -89,13 +94,15 @@ export default class DioramaParallaxTilt extends React.Component {
             a2 = 1;
         }
 
-        let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
+        let diffY = (this.windowHeight - (this.windowHeight / a2)) / 2;
+        let diffX = (this.windowWidth - (this.windowWidth / a1)) / 2;
+
         return {
             height: [this.windowHeight / a2],
 
             width: [this.windowWidth / a1],
-            x: [-this.rect.x],
-            y: [-this.rect.y + diff],
+            x: [-this.rect.x + diffX],
+            y: [-this.rect.y + diffY],
             z: 100,
             bottom: 0,
             left: 0,
@@ -137,14 +144,13 @@ export default class DioramaParallaxTilt extends React.Component {
             a2 = 1;
         }
 
-        let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
+      
         return {
             height: this.windowHeight / a2,
             canvasHeight: this.state.height,
             width: this.windowWidth / a1,
             canvasWidth: elementWidth,
-            x: 0,
-            y: 0,
+           
             z: 10,
             timing: { duration: 600, ease: easeCubicInOut },
             position: 'fixed',
@@ -167,7 +173,13 @@ export default class DioramaParallaxTilt extends React.Component {
         this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
         window.scrollTo(0, 700);
-        let elementWidth = (window.innerWidth * .8) / 2 - 15;
+        let elementWidth = (window.innerWidth * .8) / 2 - 60;
+        if (this.container.current != null) {
+            elementWidth = this.container.current.offsetWidth;
+        }
+        console.log(this.container.current.offsetWidth);
+
+
         this.imageAspect = aspectRatios[this.state.index];
 
         let a1, a2;
@@ -179,17 +191,18 @@ export default class DioramaParallaxTilt extends React.Component {
             a2 = 1;
         }
 
-        let diff = (this.windowHeight - (this.windowHeight / a2)) / 2;
-
+        let diffY = (this.windowHeight - (this.windowHeight / a2)) / 2;
+        let diffX = (this.windowWidth - (this.windowWidth / a1)) / 2;
         return {
             height: [this.state.height],
             width: [elementWidth],
-            x: [-this.rect.x, 0],
-            y: [-this.rect.y + diff + 700, 0],
+            canvasWidth: elementWidth,
+            x: [-this.rect.x + diffX, 0],
+            y: [-this.rect.y + diffY + 700, 0],
             z: [-1],
             position: "absolute",
             max: 10,
-            timing: { duration: 600, ease: easeCubicInOut },
+            timing: { duration: 1000, ease: easeCubicInOut },
             events: {
                 start: () => {
 
@@ -205,7 +218,12 @@ export default class DioramaParallaxTilt extends React.Component {
     }
 
     compactState() {
-        let elementWidth = (window.innerWidth * .8) / 2 - 15;
+        let elementWidth = (window.innerWidth * .8) / 2 - 60;
+        console.log(this.container.current);
+
+        if (this.container.current != null) {
+            elementWidth = this.container.current.offsetWidth;
+        }
         return {
             height: this.state.height,
             canvasHeight: this.state.height,
@@ -221,6 +239,7 @@ export default class DioramaParallaxTilt extends React.Component {
 
     update() {
 
+
         if (this.state.wasClicked == true) {
             console.log("grow!");
             return this.grow();
@@ -228,19 +247,19 @@ export default class DioramaParallaxTilt extends React.Component {
         if (this.state.shrink == true) {
             return this.shrink();
         }
+        if (this.state.compact == true) {
+            return this.compactState();
+        }
 
     }
 
     render() {
-        console.log(this.state.navigation.history.action);
-        let elementWidth = (window.innerWidth * .8) / 2 - 15;
-
         // if (this.state.redirect == true) {
         //     return <Redirect to={'/test' + this.state.index} />;
         // }
 
         return (
-            <div onClick={this.handleClick}>
+            <div onClick={this.handleClick} ref={this.container}>
                 <Animate
                     // start={this.state.index != 0? this.compactState() : this.shrinkStart()}
 
@@ -253,18 +272,19 @@ export default class DioramaParallaxTilt extends React.Component {
                         return (
                             <div style={{
                                 position: 'relative',
-                               
+
                             }}>
+
                                 <img src={imageGroups[this.state.index]} ref={this.img}
                                     style={{
-                                        height,
-                                        width,
-                                        position: "absolute",
+                                        width, height,
+                                        position: 'absolute',
                                         WebkitTransform: `translate(${x}px, ${y}px)`,
                                         transform: `translate(${x}px, ${y}px)`,
                                         zIndex: z,
                                         objectFit: 'cover'
-                                    }}/>
+                                    }} />
+
 
                                 <div style={{
                                     bottom, top, left, right,

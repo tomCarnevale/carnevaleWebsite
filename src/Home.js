@@ -50,20 +50,33 @@ export default class Home extends React.Component {
                 <Banner />
                 {/* <div className='dioramaGrid'> */}
 
-                <Container >
-                    <Row >
-                        <Col md={12} lg={6} >
+                <Container style={{
+                     left: "10%",
+                     right: "10%"
+                }} >
+                    <Row className="align-items-center" >
+                        <Col md={12} lg={6} style={{
+                        marginTop: 30
+                    }}>
                             <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation} />
                         </Col>
-                        <Col md={12} lg={6} >
+                       
+                        <Col md={12} lg={6} style={{
+                        marginTop: 30
+                    }}>
                             <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation} />
                         </Col>
+                        
                     </Row>
-                    <Row >
-                        <Col md={12} lg={6} >
+                    <Row>
+                        <Col md={12} lg={6} style={{
+                        marginTop: 30
+                    }}>
                             <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation} />
                         </Col>
-                        <Col md={12} lg={6} >
+                        <Col md={12} lg={6} style={{
+                        marginTop: 30
+                    }}>
                             <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation} />
                         </Col>
                     </Row>

@@ -207,7 +207,8 @@ export default class DetailsPage extends React.Component {
         canvasAspectWidth = (this.windowWidth / this.windowHeight) * this.imageAspect;
         canvasAspectHeight = 1;
 
-        let diff = (this.windowHeight - (this.windowHeight / aspectHeight)) / 2;
+        let diffY = (this.windowHeight - (this.windowHeight / aspectHeight)) / 2;
+        let diffX = (this.windowWidth - (this.windowWidth / aspectWidth)) / 2;
 
         // console.log(this.windowHeight);
         return (
@@ -257,7 +258,8 @@ export default class DetailsPage extends React.Component {
                                         height,
                                         width,
                                         position: 'fixed',
-                                        top: diff,
+                                        top: diffY,
+                                        left: diffX,
                                         // WebkitTransform: `translate(${x}px, ${y}px)`,
                                         // transform: `translate(${x}px, ${y}px)`,
                                         zIndex: z
@@ -308,17 +310,17 @@ export default class DetailsPage extends React.Component {
 
                                 </div>
 
-                                {/* <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama}
+                                <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama}
                                     style={{
                                         // height: canvasHeight,
                                         // width: canvasWidth,
                                         position: "fixed",
-                                        top: diff,
+                                        top: diffY,
                                         // WebkitTransform: `translate(${x}px, ${y}px)`,
                                         // transform: `translate(${x}px, ${y}px)`,
                                         zIndex: -5
                                     }}
-                                /> */}
+                                />
 
                             </div>
 

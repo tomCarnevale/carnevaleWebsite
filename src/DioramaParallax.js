@@ -208,6 +208,9 @@ export default class DioramaParallax extends React.Component {
     resizeHandler() {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
+        if (this.container.current == undefined)
+            return;
+            
         this.width = this.container.current.offsetWidth;
         // this.height = this.width/this.aspect;
         this.height = this.container.current.offsetHeight;
@@ -224,6 +227,8 @@ export default class DioramaParallax extends React.Component {
             a1 = (this.width / this.height) * this.imageAspect;
             a2 = 1;
         }
+        
+        
         this.uResolution.set(this.width, this.height, a1, a2);
         this.uRatio.set(1);
         this.uThreshold.set(this.hth, this.vth);
