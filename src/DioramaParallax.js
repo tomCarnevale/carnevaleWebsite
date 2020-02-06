@@ -60,7 +60,6 @@ export default class DioramaParallax extends React.Component {
         this.canvasRef = React.createRef();
         this.container = React.createRef();
        
-        console.log(props.height);
         this.state = {
             index: props.index,
             height: props.height
@@ -210,7 +209,7 @@ export default class DioramaParallax extends React.Component {
         this.windowHeight = window.innerHeight;
         if (this.container.current == undefined)
             return;
-            
+
         this.width = this.container.current.offsetWidth;
         // this.height = this.width/this.aspect;
         this.height = this.container.current.offsetHeight;

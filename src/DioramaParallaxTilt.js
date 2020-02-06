@@ -39,7 +39,8 @@ export default class DioramaParallaxTilt extends React.Component {
         this.state = {
             index: props.index,
             height: props.height,
-            navigation: props.navigation
+            navigation: props.navigation,
+            wasLastPath: props.wasLastPath
         }
         this.update = this.update.bind(this);
         this.grow = this.grow.bind(this);
@@ -57,12 +58,11 @@ export default class DioramaParallaxTilt extends React.Component {
         window.addEventListener('resize', this.updateWindowDimensions);
         this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
-        if (this.state.navigation.history.action != "POP" && this.state.index == 0)
+        if (this.state.wasLastPath == true)
             this.setState({ shrink: true, update: true });
         else {
             this.setState({ compact: true, update: true });
         }
-        console.log(this.container.current.offsetWidth);
         // this.setState({ initialUpdate: true, initialWidth: this.diorama.current.width, initialHeight: this.diorama.current.height })
     }
 
@@ -177,7 +177,6 @@ export default class DioramaParallaxTilt extends React.Component {
         if (this.container.current != null) {
             elementWidth = this.container.current.offsetWidth;
         }
-        console.log(this.container.current.offsetWidth);
 
 
         this.imageAspect = aspectRatios[this.state.index];
@@ -219,7 +218,6 @@ export default class DioramaParallaxTilt extends React.Component {
 
     compactState() {
         let elementWidth = (window.innerWidth * .8) / 2 - 60;
-        console.log(this.container.current);
 
         if (this.container.current != null) {
             elementWidth = this.container.current.offsetWidth;
@@ -241,7 +239,6 @@ export default class DioramaParallaxTilt extends React.Component {
 
 
         if (this.state.wasClicked == true) {
-            console.log("grow!");
             return this.grow();
         }
         if (this.state.shrink == true) {
@@ -263,9 +260,8 @@ export default class DioramaParallaxTilt extends React.Component {
                 <Animate
                     // start={this.state.index != 0? this.compactState() : this.shrinkStart()}
 
-                    start={this.state.navigation.history.action == "POP" ? this.compactState() :
-                        this.state.index == 0 ? this.shrinkStart() : this.compactState()
-                    }
+                    start={ this.state.wasLastPath == true ? this.shrinkStart() : this.compactState()}
+                    
                     update={this.update}
                 >
                     {({ height, canvasHeight, width, canvasWidth, position, x, y, z, bottom, left, top, right }) => {

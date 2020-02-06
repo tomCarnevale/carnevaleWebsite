@@ -37,11 +37,9 @@ export default class Home extends React.Component {
         this.state = {
             navigation: props.navigation
         }
-        console.log(props);
     }
 
     componentDidMount() {
-        console.log("mounted home");
     }
 
     render() {
@@ -58,13 +56,13 @@ export default class Home extends React.Component {
                         <Col md={12} lg={6} style={{
                         marginTop: 30
                     }}>
-                            <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation} />
+                            <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test0'} />
                         </Col>
                        
                         <Col md={12} lg={6} style={{
                         marginTop: 30
                     }}>
-                            <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation} />
+                            <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test1'}  />
                         </Col>
                         
                     </Row>
@@ -72,12 +70,12 @@ export default class Home extends React.Component {
                         <Col md={12} lg={6} style={{
                         marginTop: 30
                     }}>
-                            <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation} />
+                            <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test2'} />
                         </Col>
                         <Col md={12} lg={6} style={{
                         marginTop: 30
                     }}>
-                            <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation} />
+                            <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test3'} />
                         </Col>
                     </Row>
                 </Container>
