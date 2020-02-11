@@ -15,20 +15,7 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-const styles = {
-    grid: {
-        paddingLeft: 0,
-        paddingRight: 0
-    },
-    row: {
-        marginLeft: 0,
-        marginRight: 0
-    },
-    col: {
-        paddingLeft: 0,
-        paddingRight: 0
-    }
-};
+
 export default class Home extends React.Component {
 
 
@@ -36,10 +23,14 @@ export default class Home extends React.Component {
         super(props);
         this.state = {
             navigation: props.navigation
+
         }
+
+
     }
 
     componentDidMount() {
+
     }
 
     render() {
@@ -49,33 +40,62 @@ export default class Home extends React.Component {
                 {/* <div className='dioramaGrid'> */}
 
                 <Container style={{
-                     left: "10%",
-                     right: "10%"
+                    left: "10%",
+                    right: "10%",
+                    padding: 0
                 }} >
                     <Row className="align-items-center" >
                         <Col md={12} lg={6} style={{
-                        marginTop: 30
-                    }}>
-                            <DioramaParallaxTilt index={0} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test0'} />
+                            marginTop: 30
+                        }}>
+                            <DioramaParallaxTilt
+                                index={0}
+                                height={300}
+                                navigation={this.state.navigation}
+                                wasLastPath={this.props.lastPath == '/test0'}
+                                navigationCallback={this.props.navigationCallback}
+                                lastScroll={this.props.lastScroll}
+                            />
                         </Col>
-                       
+
                         <Col md={12} lg={6} style={{
-                        marginTop: 30
-                    }}>
-                            <DioramaParallaxTilt index={1} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test1'}  />
+                            marginTop: 30
+                        }}>
+                            <DioramaParallaxTilt
+                                index={1}
+                                height={300}
+                                navigation={this.state.navigation}
+                                wasLastPath={this.props.lastPath == '/test1'}
+                                navigationCallback={this.props.navigationCallback}
+                                lastScroll={this.props.lastScroll}
+                            />
                         </Col>
-                        
+
                     </Row>
                     <Row>
                         <Col md={12} lg={6} style={{
-                        marginTop: 30
-                    }}>
-                            <DioramaParallaxTilt index={2} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test2'} />
+                            marginTop: 30
+                        }}>
+                            <DioramaParallaxTilt
+                                index={2}
+                                height={300}
+                                navigation={this.state.navigation}
+                                wasLastPath={this.props.lastPath == '/test2'}
+                                navigationCallback={this.props.navigationCallback}
+                                lastScroll={this.props.lastScroll}
+                            />
                         </Col>
                         <Col md={12} lg={6} style={{
-                        marginTop: 30
-                    }}>
-                            <DioramaParallaxTilt index={3} height={300} navigation={this.state.navigation} wasLastPath={this.props.lastPath == '/test3'} />
+                            marginTop: 30
+                        }}>
+                            <DioramaParallaxTilt
+                                index={3}
+                                height={300}
+                                navigation={this.state.navigation}
+                                wasLastPath={this.props.lastPath == '/test3'}
+                                navigationCallback={this.props.navigationCallback}
+                                lastScroll={this.props.lastScroll}
+                            />
                         </Col>
                     </Row>
                 </Container>

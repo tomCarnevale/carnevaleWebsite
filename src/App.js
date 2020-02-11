@@ -17,36 +17,48 @@ import DetailsPage from './DetailsPage';
 
 class App extends React.Component {
     // let match = useRouteMatch({path: "/"});
-   
-    
+
+    constructor(props)
+    {
+        super(props);
+
+        this.navigationPressedFromHome = this.navigationPressedFromHome.bind(this);
+    }
 
     componentWillMount() {
         this.lastPath = this.props.history.location.pathname;
         this.unlisten = this.props.history.listen((location, action) => {
-           if (location.pathname != '/')
-           {
-               this.lastPath = location.pathname;
-           }
-            
+            if (location.pathname != '/') {
+                this.lastPath = location.pathname;
+            }
+
+         
+
+
         });
-      }
-      componentWillUnmount() {
-          this.unlisten();
-      }
-    
+    }
+    componentWillUnmount() {
+        this.unlisten();
+    }
+
+    navigationPressedFromHome()
+    {
+        this.lastScroll = window.pageYOffset;
+    }
+
 
     render() {
         return (
-                <Switch >
-                    <Route exact path="/" render={props => (
-                        <Home navigation={props} lastPath={this.lastPath} />
-                        )} /> 
-                    <Route path="/test0" render={props => <DetailsPage index={0} navigation={props} />} />
-                    <Route path="/test1" render={props => <DetailsPage index={1} navigation={props} />} />
-                    <Route path="/test2" render={props => <DetailsPage index={2} navigation={props} />} />
-                    <Route path="/test3" render={props => <DetailsPage index={3} navigation={props} />} />
+            <Switch >
+                <Route exact path="/" render={props => (
+                    <Home navigation={props} lastPath={this.lastPath} lastScroll={this.lastScroll} navigationCallback={this.navigationPressedFromHome} />
+                )} />
+                <Route path="/test0" render={props => <DetailsPage index={0} navigation={props} />} />
+                <Route path="/test1" render={props => <DetailsPage index={1} navigation={props} />} />
+                <Route path="/test2" render={props => <DetailsPage index={2} navigation={props} />} />
+                <Route path="/test3" render={props => <DetailsPage index={3} navigation={props} />} />
 
-                </Switch>
+            </Switch>
         );
     }
 }
