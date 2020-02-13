@@ -74,6 +74,9 @@ export default class DioramaParallax extends React.Component {
     componentDidMount() {
         // console.log(this.canvasRef.current);
         this.gl = this.canvasRef.current.getContext('webgl');
+        
+        console.log(this.gl);
+
 
         this.ratio = window.devicePixelRatio;
         this.windowWidth = window.innerWidth;
@@ -253,6 +256,7 @@ export default class DioramaParallax extends React.Component {
         // render
         this.billboard.renderStuff(this.gl);
         requestAnimationFrame(this.renderParallax.bind(this));
+
     }
 
     render() {
