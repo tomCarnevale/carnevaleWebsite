@@ -5,28 +5,10 @@ import { Animate } from 'react-move'
 import { easeCubicInOut } from 'd3-ease'
 import ReactDOM from 'react-dom';
 
-import mountain from './img/mount.jpg';
-import ball from './img/ball.jpg';
-import lady from './img/lady.jpg';
-import canyon from './img/canyon.jpg';
-import { interpolate } from 'd3-interpolate'
-import { Redirect } from 'react-router-dom';
-
-const imageGroups = [
-    mountain,
-    ball,
-    lady,
-    canyon
-]
-
-const aspectRatios = [
-    1069 / 1600,
-    1067 / 1600,
-    853 / 1280,
-    855 / 1280
-]
+import {imageGroups, aspectRatios} from "./Images";
 
 const fontRatio = 20;
+const bottomMargin = 15;
 
 export default class DioramaParallaxTilt extends React.Component {
 
@@ -53,8 +35,8 @@ export default class DioramaParallaxTilt extends React.Component {
         this.compactState = this.compactState.bind(this);
         this.shrinkStart = this.shrinkStart.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-        
-       
+
+
     }
 
 
@@ -99,7 +81,11 @@ export default class DioramaParallaxTilt extends React.Component {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
         this.imageAspect = aspectRatios[this.state.index];
-        let elementWidth = (window.innerWidth * .8) / 2 - 15;
+        let elementWidth = 0;
+
+        if (this.container.current != null) {
+            elementWidth = this.container.current.offsetWidth;
+        }
 
         let a1, a2;
         if (this.windowHeight / this.windowWidth < this.imageAspect) {
@@ -112,10 +98,10 @@ export default class DioramaParallaxTilt extends React.Component {
 
         let diffY = (this.windowHeight - (this.windowHeight / a2)) / 2;
         let diffX = (this.windowWidth - (this.windowWidth / a1)) / 2;
-        //console.log(window.pageYOffset);
+        //console.log(titleRect.x);
+
         return {
             height: [this.windowHeight / a2],
-
             width: [this.windowWidth / a1],
             x: [-this.rect.x + diffX],
             y: [-this.rect.y + diffY],
@@ -125,9 +111,11 @@ export default class DioramaParallaxTilt extends React.Component {
             top: 0,
             right: 0,
             titleWidth: [this.windowWidth * .8],
-            titleX: [this.windowWidth * .1 - titleRect.left + 15],
-            titleY: [this.windowHeight - 200 - titleRect.top],
-            fontSize: (elementWidth * .8) / fontRatio,
+            titleX: [this.windowWidth * .1 - titleRect.x + elementWidth * .1],
+            titleY: [this.windowHeight * .75 - titleRect.y],
+            fontSize: [(this.windowWidth * .8) / fontRatio],
+            titleMarginX: [0],
+            titleMarginY: [0],
             timing: { duration: 600, ease: easeCubicInOut },
             position: 'absolute',
             max: 0,
@@ -139,6 +127,7 @@ export default class DioramaParallaxTilt extends React.Component {
 
                 },
                 end: () => {
+                    //NAVIGATION
                     this.state.navigation.history.push('/test' + this.state.index);
                 },
             }
@@ -150,7 +139,7 @@ export default class DioramaParallaxTilt extends React.Component {
         this.windowWidth = window.innerWidth;
         this.windowHeight = window.innerHeight;
 
-        let elementWidth = (window.innerWidth * .8) / 2 - 15;
+        let elementWidth = (window.innerWidth * .8) / 2 - 60;
 
         this.imageAspect = aspectRatios[this.state.index];
 
@@ -164,15 +153,19 @@ export default class DioramaParallaxTilt extends React.Component {
         }
 
         return {
-            height: this.windowHeight / a2,
+        
             canvasHeight: this.state.height,
-            width: this.windowWidth / a1,
             canvasWidth: elementWidth,
             titleWidth: this.windowWidth * .8,
-            titleX: -this.windowWidth * .1 + 15,
-            titleY: -this.windowHeight + 200,
+            x: 0,
+            y: 0,
+            titleX: 0,
+            titleY: 0,
+            titleMarginX: 0,
+            titleMarginY: 0,
             z: 10,
-            position: 'fixed',
+            position: 'absolute',
+            fontSize: (this.windowWidth * .8) / fontRatio,
             max: 10,
             events: {
                 start: () => {
@@ -189,7 +182,9 @@ export default class DioramaParallaxTilt extends React.Component {
     }
 
     shrink() {
-        this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+        //this.rect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+        let rect = this.diorama.current.getBoundingClientRect();
+
         let titleRect = this.titleRef.current.getBoundingClientRect();
 
         //window.scrollTo(0, 700);
@@ -215,26 +210,42 @@ export default class DioramaParallaxTilt extends React.Component {
             a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
             a2 = 1;
         }
+        //a2 = (this.windowHeight / this.windowWidth) / this.imageAspect;
 
         let diffY = (this.windowHeight - (this.windowHeight / a2)) / 2;
         let diffX = (this.windowWidth - (this.windowWidth / a1)) / 2;
+
+        // console.log(-rect.y);
+        // console.log(diffY);
+        // console.log(this.state.lastScroll);
+        
+        let height = this.windowHeight / a2;
+        let width = this.windowWidth / a1;
+        let x = -rect.x + diffX;
+        let y = -rect.y + diffY + this.state.lastScroll;
+        
+        console.log(-rect.y + diffY + this.state.lastScroll);
+        //return {};
         return {
-            height: [elementHeight],
-            width: [elementWidth],
+            height: [height, elementHeight],
+            width: [width, elementWidth],
             canvasWidth: elementWidth,
             canvasHeight: elementHeight,
-            x: [-this.rect.x + diffX, 0],
-            y: [-this.rect.y + diffY + this.state.lastScroll, 0],
+            x: [x, 0],
+            y: [y, 0],
             z: [-1],
-            titleX: [this.windowWidth * .1 - titleRect.left + 15, 0],
-            titleY: [this.windowHeight - 200 - titleRect.top, 0],
-            titleWidth: [elementWidth * .8],
-            fontSize: (elementWidth * .8) / fontRatio,
+            titleX: [this.windowWidth * .1 - titleRect.x, 0],
+            titleY: [this.windowHeight * .75 - titleRect.y + this.state.lastScroll + 40, 0],
+            titleWidth: [this.windowWidth * .8, elementWidth * .8],
+            titleMarginX: [0, elementWidth * .1],
+            titleMarginY: [0, bottomMargin],
+            fontSize: [(this.windowWidth * .8) / fontRatio, (elementWidth * .8) / fontRatio],
             position: "absolute",
             max: 10,
-            timing: { duration: 1000, ease: easeCubicInOut },
+            timing: { duration: 700, ease: easeCubicInOut },
             events: {
                 start: () => {
+                    
                 },
                 interrupt: () => {
 
@@ -267,6 +278,8 @@ export default class DioramaParallaxTilt extends React.Component {
             canvasWidth: elementWidth,
             titleWidth: elementWidth * .8,
             fontSize: elementWidth * .8 / fontRatio,
+            titleMarginX: elementWidth * .1,
+            titleMarginY: bottomMargin,
             x: 0,
             y: 0,
             z: -1,
@@ -287,6 +300,7 @@ export default class DioramaParallaxTilt extends React.Component {
             return this.grow();
         }
         if (this.state.shrink == true) {
+
             return this.shrink();
         }
         if (this.state.compact == true) {
@@ -306,14 +320,14 @@ export default class DioramaParallaxTilt extends React.Component {
                     update={this.update}
                 >
                     {({ height, canvasHeight, width, canvasWidth, position, x, y, z, bottom, left, top, right,
-                        titleX, titleY, fontSize, titleWidth }) => {
+                        titleX, titleY, fontSize, titleWidth, titleMarginX, titleMarginY }) => {
                         return (
                             <div style={{
                                 position: 'relative',
 
                             }}>
 
-                                <img src={imageGroups[this.state.index]} ref={this.img}
+                                <img src={imageGroups[this.state.index][0]} ref={this.img}
                                     style={{
                                         width, height,
                                         position: 'absolute',
@@ -325,9 +339,6 @@ export default class DioramaParallaxTilt extends React.Component {
 
 
                                 <div style={{
-                                    // bottom, top, left, right,
-
-                                    // height,
                                     color: "#cccccc",
                                     fontSize: fontSize,
                                     zIndex: 100,
@@ -337,8 +348,9 @@ export default class DioramaParallaxTilt extends React.Component {
                                     <p ref={this.titleRef} style={{
                                         position: 'absolute',
                                         bottom: 0,
-                                        marginLeft: "10%",
-                                        marginRight: "10%",
+                                        marginLeft: titleMarginX,
+                                        marginRight: titleMarginX,
+                                        marginBottom: titleMarginY,
                                         width: titleWidth,
                                         WebkitTransform: `translate(${titleX}px, ${titleY}px)`,
                                         transform: `translate(${titleX}px, ${titleY}px)`,
@@ -351,8 +363,9 @@ export default class DioramaParallaxTilt extends React.Component {
                                     height: canvasHeight,
                                     width: canvasWidth,
                                     zIndex: 1
-                                }}>
-                                    <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama}
+
+                                }} ref={this.diorama}>
+                                    <DioramaParallax index={this.state.index} height={canvasHeight} lockToDiv={true}
                                         style={{
                                             zIndex: 1,
                                         }}

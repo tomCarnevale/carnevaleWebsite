@@ -44,6 +44,7 @@ class App extends React.Component {
     navigationPressedFromHome()
     {
         this.lastScroll = window.pageYOffset;
+        console.log("Last scroll: " + this.lastScroll);
     }
 
 

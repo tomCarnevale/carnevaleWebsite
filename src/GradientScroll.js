@@ -68,7 +68,7 @@ export default class GradientScroll extends React.Component {
                                 position: "fixed",
                                 zIndex: 0,
                                 height: "100%",
-                                margin: "auto",
+                                //margin: "auto",
                                 top: 0,
                                 right: 0,
                                 bottom: 0,
@@ -82,27 +82,30 @@ export default class GradientScroll extends React.Component {
                                         position: "fixed",
                                         zIndex: 0,
                                         height: "100%",
-                                        margin: "auto",
+                                        maxWidth: this.windowWidth * .8,
+                                        width: this.windowWidth * .8,
                                         top: 0,
                                         right: 0,
                                         bottom: 0,
                                         left: 0,
-                                        width: "80%",
+                                       
+                                        marginLeft: this.windowWidth * .1,
+                                        marginRight: this.windowWidth * .1,
                                         overflow: 'scroll',
                                         fontSize: "30px",
                                         color: "#dddddd",
 
                                     }}>
                                     <Row style={{
-                                        height: this.windowHeight * .5
+                                        height: this.windowHeight * .75
                                     }}></Row>
                                     <Row style={{
                                         fontSize: (this.windowWidth * .8) / 20
                                     }}>
-                                        <Col xl={12} md={12} style={{padding: 0}}>Celebrating Grilling without getting in the way</Col>
+                                        <Col xl={12} md={12} style={{ padding: 0 }}>Celebrating Grilling without getting in the way</Col>
                                     </Row>
                                     <Row>
-                                        <Col style={{padding: 0}}>
+                                        <Col style={{ padding: 0 }}>
                                             {this.props.text}
                                         </Col>
                                     </Row>
