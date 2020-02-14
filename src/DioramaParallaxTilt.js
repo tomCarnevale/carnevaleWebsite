@@ -151,6 +151,7 @@ export default class DioramaParallaxTilt extends React.Component {
             a1 = (this.windowWidth / this.windowHeight) * this.imageAspect;
             a2 = 1;
         }
+        
 
         return {
         
@@ -227,7 +228,7 @@ export default class DioramaParallaxTilt extends React.Component {
         console.log(-rect.y + diffY + this.state.lastScroll);
         //return {};
         return {
-            height: [height, elementHeight],
+            height: [height, this.state.height],
             width: [width, elementWidth],
             canvasWidth: elementWidth,
             canvasHeight: elementHeight,
@@ -272,8 +273,8 @@ export default class DioramaParallaxTilt extends React.Component {
         elementHeight = elementWidth * (this.windowHeight / this.windowWidth);
 
         return {
-            height: elementHeight,
-            canvasHeight: elementHeight,
+            height: this.state.height,
+            canvasHeight: this.state.height,
             width: elementWidth,
             canvasWidth: elementWidth,
             titleWidth: elementWidth * .8,
@@ -360,12 +361,12 @@ export default class DioramaParallaxTilt extends React.Component {
                                         </p>
                                 </div>
                                 <div style={{
-                                    height: canvasHeight,
+                                    height: this.state.height,
                                     width: canvasWidth,
                                     zIndex: 1
 
                                 }} ref={this.diorama}>
-                                    <DioramaParallax index={this.state.index} height={canvasHeight} lockToDiv={true}
+                                    <DioramaParallax index={this.state.index} height={this.state.height} lockToDiv={true}
                                         style={{
                                             zIndex: 1,
                                         }}
