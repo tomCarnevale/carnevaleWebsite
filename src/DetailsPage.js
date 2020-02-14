@@ -10,23 +10,11 @@ import canyon from './img/canyon.jpg';
 import { Animate } from 'react-move'
 import { easeCubicInOut } from 'd3-ease'
 import ReactDOM from 'react-dom';
+import {imageGroups, aspectRatios } from './Images';
 
 import GradientScroll from './GradientScroll';
 
-const imageGroups = [
-    mountain,
-    ball,
-    lady,
-    canyon
-]
 
-//TODO make this runtime
-const aspectRatios = [
-    1069 / 1600,
-    1067 / 1600,
-    853 / 1280,
-    855 / 1280
-]
 export default class DetailsPage extends React.Component {
 
     constructor(props) {
@@ -232,7 +220,7 @@ export default class DetailsPage extends React.Component {
                                     }}>
                                 </div>
                                 {/* </Link> */}
-                                <img src={imageGroups[this.state.index]} ref={this.img}
+                                <img src={imageGroups[this.state.index][0]} ref={this.img}
                                     style={{
                                         height,
                                         width,

@@ -5,26 +5,7 @@ import { Animate } from 'react-move'
 import { easeCubicInOut } from 'd3-ease'
 import ReactDOM from 'react-dom';
 
-import mountain from './img/mount.jpg';
-import ball from './img/ball.jpg';
-import lady from './img/lady.jpg';
-import canyon from './img/canyon.jpg';
-import { interpolate } from 'd3-interpolate'
-import { Redirect } from 'react-router-dom';
-
-const imageGroups = [
-    mountain,
-    ball,
-    lady,
-    canyon
-]
-
-const aspectRatios = [
-    1069 / 1600,
-    1067 / 1600,
-    853 / 1280,
-    855 / 1280
-]
+import {imageGroups, aspectRatios} from "./Images";
 
 const fontRatio = 20;
 const bottomMargin = 15;
@@ -183,7 +164,7 @@ export default class DioramaParallaxTilt extends React.Component {
             titleMarginX: 0,
             titleMarginY: 0,
             z: 10,
-            position: 'fixed',
+            position: 'absolute',
             fontSize: (this.windowWidth * .8) / fontRatio,
             max: 10,
             events: {
@@ -234,36 +215,37 @@ export default class DioramaParallaxTilt extends React.Component {
         let diffY = (this.windowHeight - (this.windowHeight / a2)) / 2;
         let diffX = (this.windowWidth - (this.windowWidth / a1)) / 2;
 
-        //I dont know why we need this arbitrary offset
-       
-        console.log(a2);
         // console.log(-rect.y);
         // console.log(diffY);
         // console.log(this.state.lastScroll);
-        //console.log(-rect.y + diffY + this.state.lastScroll);
-
-
+        
+        let height = this.windowHeight / a2;
+        let width = this.windowWidth / a1;
+        let x = -rect.x + diffX;
+        let y = -rect.y + diffY + this.state.lastScroll;
+        
+        console.log(-rect.y + diffY + this.state.lastScroll);
         //return {};
         return {
-            height: [this.windowHeight / a2, elementHeight],
-            width: [this.windowWidth / a1, elementWidth],
+            height: [height, elementHeight],
+            width: [width, elementWidth],
             canvasWidth: elementWidth,
             canvasHeight: elementHeight,
-            x: [-rect.x + diffX, 0],
-            y: [-rect.y + diffY + this.state.lastScroll, 0],
+            x: [x, 0],
+            y: [y, 0],
             z: [-1],
             titleX: [this.windowWidth * .1 - titleRect.x, 0],
-            titleY: [this.windowHeight * .75 - titleRect.y + this.state.lastScroll, 0],
+            titleY: [this.windowHeight * .75 - titleRect.y + this.state.lastScroll + 40, 0],
             titleWidth: [this.windowWidth * .8, elementWidth * .8],
             titleMarginX: [0, elementWidth * .1],
             titleMarginY: [0, bottomMargin],
-
             fontSize: [(this.windowWidth * .8) / fontRatio, (elementWidth * .8) / fontRatio],
             position: "absolute",
             max: 10,
             timing: { duration: 700, ease: easeCubicInOut },
             events: {
                 start: () => {
+                    
                 },
                 interrupt: () => {
 
@@ -345,7 +327,7 @@ export default class DioramaParallaxTilt extends React.Component {
 
                             }}>
 
-                                <img src={imageGroups[this.state.index]} ref={this.img}
+                                <img src={imageGroups[this.state.index][0]} ref={this.img}
                                     style={{
                                         width, height,
                                         position: 'absolute',

@@ -2,14 +2,7 @@ import React, { useRef } from 'react'
 import { Canvas, useFrame } from 'react-three-fiber'
 // import fragment from './shaders/fragment.glsl';
 // import vertex from './shaders/vertex.glsl';
-import mountain from './img/mount.jpg';
-import mountainMap from './img/mount-map.jpg';
-import ball from './img/ball.jpg';
-import ballMap from './img/ball-map.jpg';
-import lady from './img/lady.jpg';
-import ladyMap from './img/lady-map.jpg';
-import canyon from './img/canyon.jpg';
-import canyonMap from './img/canyon-map.jpg';
+import {imageGroups, aspectRatios } from "./Images";
 var vertex = `
 attribute vec2 a_position;
 
@@ -46,12 +39,7 @@ void main() {
   gl_FragColor = texture2D(image0,mirrored(fake3d));
 }`;
 
-const imageGroups = [
-    [mountain, mountainMap,],
-    [ball, ballMap,],
-    [lady, ladyMap,],
-    [canyon, canyonMap,]
-]
+
 export default class DioramaParallax extends React.Component {
 
 
