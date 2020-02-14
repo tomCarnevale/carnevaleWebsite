@@ -53,7 +53,7 @@ export default class DetailsPage extends React.Component {
         this.updateWindowDimensions();
         window.addEventListener('resize', this.updateWindowDimensions);
         this.setState({ text: this.getText() });
-        window.scrollTo(0, 0);
+        //window.scrollTo(0, 0);
     }
 
     componentWillUnmount() {
@@ -246,13 +246,13 @@ export default class DetailsPage extends React.Component {
                                
                                <GradientScroll text={this.getText()}/>
 
-                                <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama}
+                                {/* <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama} lockToDiv={false}
                                     style={{
                                         position: "fixed",
                                         top: diffY,
                                         zIndex: -5
                                     }}
-                                />
+                                /> */}
 
                             </div>
 

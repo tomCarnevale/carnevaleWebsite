@@ -59,24 +59,24 @@ export default class DioramaParallax extends React.Component {
         super(props);
         this.canvasRef = React.createRef();
         this.container = React.createRef();
-       
+
         this.state = {
             index: props.index,
-            height: props.height
+            height: props.height,
+            lockToDiv: props.lockToDiv == true
         }
+        this.onMouseEnterHander = this.onMouseEnterHander.bind(this);
+        this.onMouseLeaveHandler = this.onMouseLeaveHandler.bind(this);
+
     }
 
-    componentDidUpdate()
-    {
+    componentDidUpdate() {
         // this.resizeHandler();
     }
 
     componentDidMount() {
         // console.log(this.canvasRef.current);
         this.gl = this.canvasRef.current.getContext('webgl');
-        
-        console.log(this.gl);
-
 
         this.ratio = window.devicePixelRatio;
         this.windowWidth = window.innerWidth;
@@ -145,11 +145,21 @@ export default class DioramaParallax extends React.Component {
         this.gl.vertexAttribPointer(this.positionLocation, 2, this.gl.FLOAT, false, 0, 0);
     }
 
+    onMouseEnterHander() {
+        this.mouseEntered = true;
+    }
+
+    onMouseLeaveHandler() {
+        this.mouseEntered = false;
+    }
+
     addTexture() {
         let that = this;
         let gl = that.gl;
         loadImages(this.imageURLs, that.start.bind(this));
     }
+
+
 
     mouseMove() {
         let that = this;
@@ -157,10 +167,12 @@ export default class DioramaParallax extends React.Component {
             let halfX = that.windowWidth / 2;
             let halfY = that.windowHeight / 2;
 
-            that.mouseTargetX = (halfX - e.clientX) / halfX;
-            that.mouseTargetY = (halfY - e.clientY) / halfY;
+            if (that.mouseEntered == true || !that.state.lockToDiv) {
 
+                that.mouseTargetX = (halfX - e.clientX) / halfX;
 
+                that.mouseTargetY = (halfY - e.clientY) / halfY;
+            }
         });
     }
 
@@ -229,8 +241,8 @@ export default class DioramaParallax extends React.Component {
             a1 = (this.width / this.height) * this.imageAspect;
             a2 = 1;
         }
-        
-        
+
+
         this.uResolution.set(this.width, this.height, a1, a2);
         this.uRatio.set(1);
         this.uThreshold.set(this.hth, this.vth);
@@ -251,6 +263,7 @@ export default class DioramaParallax extends React.Component {
         this.mouseY += (this.mouseTargetY - this.mouseY) * 0.35;
 
 
+
         this.uMouse.set(-this.mouseX * .5, -this.mouseY * .5);
 
         // render
@@ -264,7 +277,7 @@ export default class DioramaParallax extends React.Component {
             <div ref={this.container}
                 style={{ height: this.props.height }}
             >
-                <div id="gl" >
+                <div id="gl" onMouseEnter={this.onMouseEnterHander} onMouseLeave={this.onMouseLeaveHandler}>
                     <canvas ref={this.canvasRef}>
                     </canvas>
                 </div>
