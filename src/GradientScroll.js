@@ -100,7 +100,7 @@ export default class GradientScroll extends React.Component {
                                         height: this.windowHeight * .75
                                     }}></Row>
                                     <Row style={{
-                                        fontSize: (this.windowWidth * .8) / 20
+                                        fontSize: this.windowHeight / 12
                                     }}>
                                         <Col xl={12} md={12} style={{ padding: 0 }}>Celebrating Grilling without getting in the way</Col>
                                     </Row>

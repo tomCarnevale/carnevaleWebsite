@@ -234,13 +234,13 @@ export default class DetailsPage extends React.Component {
                                
                                <GradientScroll text={this.getText()}/>
 
-                                {/* <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama} lockToDiv={false}
+                                <DioramaParallax index={this.state.index} height={canvasHeight} ref={this.diorama} lockToDiv={false}
                                     style={{
                                         position: "fixed",
                                         top: diffY,
                                         zIndex: -5
                                     }}
-                                /> */}
+                                />
 
                             </div>
 
